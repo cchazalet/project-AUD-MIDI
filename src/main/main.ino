@@ -16,10 +16,6 @@ float mtof(float note){
   return pow(2.0,(note-69.0)/12.0)*440.0;
 }
 
-int tune[] = {62,78,65,67,69};
-int cnt = 0;
-
-
 void setup() {
   Serial.begin(115200);
   AudioMemory(2);
@@ -31,6 +27,7 @@ void loop() {
   // usbMIDI.read() needs to be called rapidly from loop().  When
   // each MIDI messages arrives, it return true.  The message must
   // be fully processed before usbMIDI.read() is called again.
+  
   if (usbMIDI.read()) {
     processMIDI();
   }
@@ -62,7 +59,7 @@ void processMIDI(void) {
       Serial.print(data1, DEC);
       Serial.print(", velocity=");
       Serial.println(data2, DEC);
-      myDsp.setOnOff(0);
+      myDsp.setVelocity(0);
       break;
 
     case usbMIDI.NoteOn: // 0x90
@@ -73,7 +70,7 @@ void processMIDI(void) {
       Serial.print(", velocity=");
       Serial.println(data2, DEC);
       currNote = data1 ;
-      myDsp.setOnOff(1);
+      myDsp.setVelocity(data2*0.007874015748031);
       myDsp.setFreq(mtof(data1));
       break;
 

@@ -11,6 +11,7 @@ echo(AUDIO_SAMPLE_RATE_EXACT,10000)
 {
   echo.setDel(10000);
   echo.setFeedback(0.5);
+  gain = 0.8;
 }
 
 MyDsp::~MyDsp(){}
@@ -25,8 +26,8 @@ void MyDsp::setGain(float g){
   gain = g;
 }
 
-void MyDsp::setOnOff(int i){
-  onOff = i;
+void MyDsp::setVelocity(float v){
+  velocity = v;
 }
 
 
@@ -36,7 +37,7 @@ void MyDsp::update(void) {
     outBlock[channel] = allocate();
     if (outBlock[channel]) {
       for (int i = 0; i < AUDIO_BLOCK_SAMPLES; i++) {
-        float currentSample = sine.tick()*gain*onOff;
+        float currentSample = sine.tick()*gain*velocity;
         currentSample = max(-1,min(1,currentSample));
         int16_t val = currentSample*MULT_16;
         outBlock[channel]->data[i] = val;
