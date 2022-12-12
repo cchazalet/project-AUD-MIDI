@@ -1,18 +1,29 @@
-/* Receive Incoming USB MIDI by reading data.  This approach
-   gives you access to incoming MIDI message data, but requires
-   more work to use that data.  For the simpler function-based
-   approach, see InputFunctionsBasic and InputFunctionsComplete.
-
-   Use the Arduino Serial Monitor to view the messages
-   as Teensy receives them by USB MIDI
-
-   You must select MIDI from the "Tools > USB Type" menu
-
-   This example code is in the public domain.
+/* Synthetiser MIDI 
+ *  
+ *  Project AUD
 */
+#include <Audio.h>
+#include "MyDsp.h"
+
+MyDsp myDsp;
+AudioOutputI2S out;
+AudioControlSGTL5000 audioShield;
+AudioConnection patchCord0(myDsp,0,out,0);
+AudioConnection patchCord1(myDsp,0,out,1);
+
+float mtof(float note){
+  return pow(2.0,(note-69.0)/12.0)*440.0;
+}
+
+int tune[] = {62,78,65,67,69};
+int cnt = 0;
+
 
 void setup() {
   Serial.begin(115200);
+  AudioMemory(2);
+  audioShield.enable();
+  audioShield.volume(0.5);
 }
 
 void loop() {
@@ -59,6 +70,7 @@ void processMIDI(void) {
       Serial.print(data1, DEC);
       Serial.print(", velocity=");
       Serial.println(data2, DEC);
+      myDsp.setFreq(mtof(data1));
       break;
 
     case usbMIDI.AfterTouchPoly: // 0xA0
@@ -77,6 +89,9 @@ void processMIDI(void) {
       Serial.print(data1, DEC);
       Serial.print(", value=");
       Serial.println(data2, DEC);
+      if((int) data1 == 7){
+        
+      }
       break;
 
     case usbMIDI.ProgramChange: // 0xC0
