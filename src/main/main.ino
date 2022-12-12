@@ -10,6 +10,7 @@ AudioOutputI2S out;
 AudioControlSGTL5000 audioShield;
 AudioConnection patchCord0(myDsp,0,out,0);
 AudioConnection patchCord1(myDsp,0,out,1);
+float currNote = 69;
 
 float mtof(float note){
   return pow(2.0,(note-69.0)/12.0)*440.0;
@@ -70,6 +71,7 @@ void processMIDI(void) {
       Serial.print(data1, DEC);
       Serial.print(", velocity=");
       Serial.println(data2, DEC);
+      currNote = data1 ;
       myDsp.setFreq(mtof(data1));
       break;
 
@@ -112,7 +114,11 @@ void processMIDI(void) {
       Serial.print("Pitch Change, ch=");
       Serial.print(channel, DEC);
       Serial.print(", pitch=");
-      Serial.println(data1 + data2 * 128, DEC);
+      Serial.print(data1 + data2 * 128, DEC);
+      float freq = pitch(data1+data2*128);
+      myDsp.setFreq(freq);
+      Serial.print(", freq=");
+      Serial.println(freq);
       break;
 
     case usbMIDI.SystemExclusive: // 0xF0
@@ -183,4 +189,15 @@ void printBytes(const byte *data, unsigned int size) {
     if (size > 1) Serial.print(' ');
     size = size - 1;
   }
+}
+
+float pitch(int pitch){
+   float pitchBend=0.0;
+   if (pitch == 8192)
+    pitchBend = 0;
+  else
+    pitchBend = (pitch-8192)/8192.;
+  Serial.print("pb:");
+  Serial.print(currNote);
+  return pow(2,(currNote - 69)/12.+pitchBend)*440; 
 }
