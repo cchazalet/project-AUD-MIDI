@@ -4,6 +4,7 @@
 */
 #include <Audio.h>
 #include "MyDsp.h"
+#include "SineWrapper.h"
 
 MyDsp myDsp;
 AudioOutputI2S out;
