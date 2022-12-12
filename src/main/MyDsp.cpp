@@ -20,13 +20,23 @@ void MyDsp::setFreq(float freq){
   sine.setFrequency(freq);
 }
 
+// set gain
+void MyDsp::setGain(float g){
+  gain = g;
+}
+
+void MyDsp::setOnOff(int i){
+  onOff = i;
+}
+
+
 void MyDsp::update(void) {
   audio_block_t* outBlock[AUDIO_OUTPUTS];
   for (int channel = 0; channel < AUDIO_OUTPUTS; channel++) {
     outBlock[channel] = allocate();
     if (outBlock[channel]) {
       for (int i = 0; i < AUDIO_BLOCK_SAMPLES; i++) {
-        float currentSample = echo.tick(sine.tick())*0.5;
+        float currentSample = sine.tick()*gain*onOff;
         currentSample = max(-1,min(1,currentSample));
         int16_t val = currentSample*MULT_16;
         outBlock[channel]->data[i] = val;

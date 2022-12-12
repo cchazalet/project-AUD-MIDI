@@ -16,10 +16,14 @@ class MyDsp : public AudioStream
     
     virtual void update(void);
     void setFreq(float freq);
+    void setGain(float gain);
+    void setOnOff(int i);
     
   private:
     Sine sine;
     Echo echo;
+    float gain;
+    int onOff;
 };
 
 #endif

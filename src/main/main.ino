@@ -61,6 +61,7 @@ void processMIDI(void) {
       Serial.print(data1, DEC);
       Serial.print(", velocity=");
       Serial.println(data2, DEC);
+      myDsp.setOnOff(0);
       break;
 
     case usbMIDI.NoteOn: // 0x90
@@ -70,6 +71,7 @@ void processMIDI(void) {
       Serial.print(data1, DEC);
       Serial.print(", velocity=");
       Serial.println(data2, DEC);
+      myDsp.setOnOff(1);
       myDsp.setFreq(mtof(data1));
       break;
 
@@ -90,7 +92,11 @@ void processMIDI(void) {
       Serial.print(", value=");
       Serial.println(data2, DEC);
       if((int) data1 == 7){
-        
+        // Convert between 0 and 1
+        float gainNorm = ((int) data2)*0.007874015748031;
+        Serial.print("Set Gain to =");
+        Serial.println(gainNorm);
+        myDsp.setGain(gainNorm);
       }
       break;
 
