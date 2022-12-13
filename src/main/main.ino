@@ -3,10 +3,9 @@
  *  Project AUD
 */
 #include <Audio.h>
-#include "MyDsp.h"
-#include "SineWrapper.h"
+#include "MyDspPoly.h"
 
-MyDsp myDsp;
+MyDspPoly myDsp;
 AudioOutputI2S out;
 AudioControlSGTL5000 audioShield;
 AudioConnection patchCord0(myDsp,0,out,0);
