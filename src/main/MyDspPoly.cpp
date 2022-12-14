@@ -32,6 +32,7 @@ void MyDspPoly::noteOn(int note, float velo){
   notesPressed[index]=note;
   index++;
   index=index%NB_VOICES;
+  
 }
 
 void MyDspPoly::noteOff(int note, float velo){
@@ -41,6 +42,27 @@ void MyDspPoly::noteOff(int note, float velo){
       velocity[i]=0;
     }
   }
+}
+
+void MyDspPoly::pitch(int pitch_val){
+  Serial.print("Pitched");
+  Serial.println(pitch_val);
+  for(int i=0;i<NB_VOICES;i++){
+    if(notesPressed[i]!= -1){
+      float pf = pitchCalc(pitch_val, notesPressed[i]);
+      tabVoices[i]->setFrequency(pf);
+    }
+  }
+}
+
+
+float MyDspPoly::pitchCalc(int pitch, int note){
+   float pitchBend=0.0;
+   if (pitch == 8192)
+    pitchBend = 0;
+  else
+    pitchBend = (pitch-8192)/8192.;
+  return pow(2,(note - 69)/12.+pitchBend)*440; 
 }
 
 

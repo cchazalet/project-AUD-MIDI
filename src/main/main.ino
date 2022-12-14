@@ -121,10 +121,7 @@ void processMIDI(void) {
       Serial.print(channel, DEC);
       Serial.print(", pitch=");
       Serial.print(data1 + data2 * 128, DEC);
-      float freq = pitch(data1+data2*128);
-      myDsp.setFreq(freq);
-      Serial.print(", freq=");
-      Serial.println(freq);
+      myDsp.pitch(data1+data2*128);
       break;
     }
 
@@ -196,15 +193,4 @@ void printBytes(const byte *data, unsigned int size) {
     if (size > 1) Serial.print(' ');
     size = size - 1;
   }
-}
-
-float pitch(int pitch){
-   float pitchBend=0.0;
-   if (pitch == 8192)
-    pitchBend = 0;
-  else
-    pitchBend = (pitch-8192)/8192.;
-  Serial.print("pb:");
-  Serial.print(currNote);
-  return pow(2,(currNote - 69)/12.+pitchBend)*440; 
 }

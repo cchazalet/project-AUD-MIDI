@@ -23,8 +23,11 @@ class MyDspPoly : public AudioStream
     void setVelocity(float v);
     void noteOn(int, float);
     void noteOff(int, float);
+    void pitch(int);
+
     
   private:
+    float pitchCalc(int, int);
     Sine *tabVoices[NB_VOICES];
     int index;
     int* notesPressed;
