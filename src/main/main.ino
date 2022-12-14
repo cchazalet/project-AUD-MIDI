@@ -20,7 +20,7 @@ void setup() {
   Serial.begin(115200);
   AudioMemory(2);
   audioShield.enable();
-  audioShield.volume(0.5);
+  audioShield.volume(0.75);
 }
 
 void loop() {

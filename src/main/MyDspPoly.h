@@ -7,6 +7,7 @@
 
 #include "Sine.h"
 #include "Echo.h"
+#include "Smooth.h"
 
 #define NB_VOICES 4
 
@@ -31,6 +32,7 @@ class MyDspPoly : public AudioStream
     int* notesPressed;
     float gain;
     float* velocity;
+    Smooth* smoth[NB_VOICES];
 };
 
 #endif

@@ -5,12 +5,14 @@
 #define MULT_16 32767
 
 MyDspPoly::MyDspPoly() : 
-AudioStream(AUDIO_OUTPUTS, new audio_block_t*[AUDIO_OUTPUTS])
+AudioStream(AUDIO_OUTPUTS, new audio_block_t*[AUDIO_OUTPUTS]),
+smoth()
 {
   notesPressed = new int[NB_VOICES];
   velocity = new float[NB_VOICES];
   for(int i=0; i<NB_VOICES; i++){
     tabVoices[i]=new Sine(AUDIO_SAMPLE_RATE_EXACT);
+    smoth[i]=new Smooth();
     notesPressed[i]=-1;
     velocity[i]=0;
   }
@@ -89,9 +91,9 @@ void MyDspPoly::update(void) {
       for (int i = 0; i < AUDIO_BLOCK_SAMPLES; i++) {        
         float currentSample = 0;
         for(int i=0;i<NB_VOICES;i++){
-          currentSample += tabVoices[i]->tick()*velocity[i]*gain;
+          currentSample += tabVoices[i]->tick()*smoth[i]->tick(velocity[i])*gain;
         }
-        currentSample = max(-1,min(1,currentSample));
+        currentSample = max(-1,min(1,currentSample*1/NB_VOICES));
         int16_t val = currentSample*MULT_16;
         outBlock[channel]->data[i] = val;
       }
