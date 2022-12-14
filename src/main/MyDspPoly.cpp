@@ -23,13 +23,25 @@ MyDspPoly::~MyDspPoly(){}
 
 
 void MyDspPoly::noteOn(int note, float velo){
+  //Recherche d'un oscilateur libre
+  int newIndex = -1;
+  for(int i=0;i<NB_VOICES;i++){
+    if(notesPressed[i] == -1){
+      newIndex = i;
+      break;
+    }
+  }
+  //Si j'ai trouvé un oscillateur libre
+  if(newIndex != -1){
+    index = newIndex;
+  }
+  else{
+    index++;
+  }
   float freq = pow(2.0,(note-69.0)/12.0)*440.0;
   tabVoices[index]->setFrequency(freq);
   velocity[index]=velo;
   notesPressed[index]=note;
-  index++;
-  index=index%NB_VOICES;
-  
 }
 
 void MyDspPoly::noteOff(int note, float velo){
@@ -60,13 +72,6 @@ float MyDspPoly::pitchCalc(int pitch, int note){
   else
     pitchBend = (pitch-8192)/8192.;
   return pow(2,(note - 69)/12.+pitchBend)*440; 
-}
-
-
-
-// set sine wave frequency
-void MyDspPoly::setFreq(float freq){
-  //sine.setFrequency(freq);
 }
 
 // set gain
