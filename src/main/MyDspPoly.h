@@ -8,6 +8,9 @@
 #include "Sine.h"
 #include "Echo.h"
 
+#define NB_VOICES 4
+
+
 class MyDspPoly : public AudioStream
 {
   public:
@@ -18,14 +21,15 @@ class MyDspPoly : public AudioStream
     void setFreq(float freq);
     void setGain(float gain);
     void setVelocity(float v);
+    void noteOn(int, float);
+    void noteOff(int, float);
     
   private:
-    //Sine sine;
-    //Echo echo;
-    Sine* tabVoices;
+    Sine *tabVoices[NB_VOICES];
+    int index;
     int* notesPressed;
     float gain;
-    float velocity;
+    float* velocity;
 };
 
 #endif

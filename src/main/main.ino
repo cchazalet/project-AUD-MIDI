@@ -59,7 +59,7 @@ void processMIDI(void) {
       Serial.print(data1, DEC);
       Serial.print(", velocity=");
       Serial.println(data2, DEC);
-      myDsp.setVelocity(0);
+      myDsp.noteOff(data1, 0);
       break;
 
     case usbMIDI.NoteOn: // 0x90
@@ -69,9 +69,11 @@ void processMIDI(void) {
       Serial.print(data1, DEC);
       Serial.print(", velocity=");
       Serial.println(data2, DEC);
+      myDsp.noteOn(data1, data2*0.007874015748031);
+      /*
       currNote = data1 ;
       myDsp.setVelocity(data2*0.007874015748031);
-      myDsp.setFreq(mtof(data1));
+      myDsp.setFreq(mtof(data1));*/
       break;
 
     case usbMIDI.AfterTouchPoly: // 0xA0
@@ -114,6 +116,7 @@ void processMIDI(void) {
       break;
 
     case usbMIDI.PitchBend: // 0xE0
+    {
       Serial.print("Pitch Change, ch=");
       Serial.print(channel, DEC);
       Serial.print(", pitch=");
@@ -123,6 +126,7 @@ void processMIDI(void) {
       Serial.print(", freq=");
       Serial.println(freq);
       break;
+    }
 
     case usbMIDI.SystemExclusive: // 0xF0
       // Messages larger than usbMIDI's internal buffer are truncated.
