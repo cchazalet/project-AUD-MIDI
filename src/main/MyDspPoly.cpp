@@ -37,6 +37,7 @@ void MyDspPoly::noteOn(int note, float velo){
   }
   else{
     index++;
+    index=index%NB_VOICES;
   }
   float freq = pow(2.0,(note-69.0)/12.0)*440.0;
   tabVoices[index]->setFrequency(freq);
