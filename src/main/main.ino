@@ -122,7 +122,7 @@ void processMIDI(void) {
       Serial.print(", pitch=");
       Serial.print(data1 + data2 * 128, DEC);
       float freq = pitch(data1+data2*128);
-      myDsp.setFreq(freq);
+      //myDsp.setFreq(freq);
       Serial.print(", freq=");
       Serial.println(freq);
       break;

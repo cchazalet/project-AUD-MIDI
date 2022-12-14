@@ -18,9 +18,7 @@ class MyDspPoly : public AudioStream
     ~MyDspPoly();
     
     virtual void update(void);
-    void setFreq(float freq);
     void setGain(float gain);
-    void setVelocity(float v);
     void noteOn(int, float);
     void noteOff(int, float);
     
